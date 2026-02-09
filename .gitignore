@@ -113,6 +113,47 @@ __pycache__/
 venv/
 
 # ------------------------------
+# LaTeX
+# ------------------------------
+## Core auxiliary files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex.gz(busy)
+*.toc
+
+## Bibliography
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+
+## Beamer
+*.nav
+*.snm
+*.vrb
+
+## Glossaries / index
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.idx
+*.ind
+*.ilg
+*.xdy
+
+## Minted
+_minted*/
+*.pyg
+
+# ------------------------------
 # Project-specific (gem5 / RISC-V)
 # ------------------------------
 # Default gem5 output directory (often large / regenerated)
