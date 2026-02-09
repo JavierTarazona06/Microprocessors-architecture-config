@@ -1,0 +1,23 @@
+Ajouter à BranchPredictor.py :
+
+class StaticTakenBP(BranchPredictor):
+    type = "StaticTakenBP"
+    cxx_class = "gem5::branch_prediction::StaticTakenBP"
+    cxx_header = "cpu/pred/static_bp.hh"
+
+class StaticNotTakenBP(BranchPredictor):
+    type = "StaticNotTakenBP"
+    cxx_class = "gem5::branch_prediction::StaticNotTakenBP"
+    cxx_header = "cpu/pred/static_bp.hh"
+
+
+Dans le SConscript du répertoire (souvent src/cpu/pred/SConscript) ajouter à la fin des objets de BranchPredictor :
+
+'StaticTakenBP', 'StaticNotTakenBP'
+
+et dans les sources :
+
+Source('static_bp.cc')
+
+puis rebuild :
+scons build/RISCV/gem5.opt -j$(nproc)
