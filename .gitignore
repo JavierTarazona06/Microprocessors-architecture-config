@@ -1,0 +1,124 @@
+# ------------------------------
+# C / C++ (generic)
+# ------------------------------
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# Precompiled headers
+*.gch
+*.pch
+*.pch.*
+
+# Dependency files
+*.d
+*.d.*
+
+# Debug / profiling
+*.pdb
+*.idb
+*.dSYM/
+*.gcda
+*.gcno
+*.gcov
+*.profraw
+*.profdata
+
+# ------------------------------
+# Build systems
+# ------------------------------
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+cmake-build-*/
+
+# Make / Autotools
+Makefile
+*.make
+config.status
+config.log
+autom4te.cache/
+aclocal.m4
+configure
+libtool
+ltmain.sh
+m4/
+
+# Ninja
+.ninja_deps
+.ninja_log
+build.ninja
+
+# SCons
+.sconsign.dblite
+
+# Generic build folders
+build/
+Build/
+bin/
+Bin/
+dist/
+out/
+
+# ------------------------------
+# IDEs / editors
+# ------------------------------
+.vscode/
+.idea/
+.vs/
+*.code-workspace
+
+# CLion
+cmake-build-debug/
+cmake-build-release/
+
+# Vim / Emacs / swap
+*~
+*.swp
+*.swo
+\#*\#
+.\#*
+
+# ------------------------------
+# OS junk
+# ------------------------------
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ------------------------------
+# Python (if scripts are used)
+# ------------------------------
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# ------------------------------
+# Project-specific (gem5 / RISC-V)
+# ------------------------------
+# Default gem5 output directory (often large / regenerated)
+**/m5out/
+
+# RISC-V cross-compiled binaries (typically large & reproducible)
+*.riscv
+*.elf
+*.bin
