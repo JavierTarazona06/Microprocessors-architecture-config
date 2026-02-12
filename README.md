@@ -30,7 +30,7 @@ Catalogue des runs gem5. Chaque ligne = un run, traçable via `run_path`.
 ## Exercice 3
 
 ## Contenu de `exo3/`
-- `exo3/Makefile` : compile les 4 variantes de multiplication de matrices (`normale`, `pointer`, `tempo`, `unrol`) en natif et en RISC-V statique (`*.riscv`) pour gem5.
+- `exo3/Makefile` : compile les 4 variantes de multiplication de matrices (`normale`, `pointer`, `tempo`, `unrol`) en natif et en RISC-V statique (`*.riscv`) pour gem5. Para compilar RISC corre exo3/compilationRISC.sh
 - `exo3/mm.c` : source historique de tests de multiplication de matrices (commentaires sur variantes et temporisation).
 - `exo3/normale.c`, `exo3/pointer.c`, `exo3/tempo.c`, `exo3/unrol.c` : implémentations des 4 variantes (ex : `pointer.c` utilise des pointeurs et vérifie le résultat).
 - `exo3/normale`, `exo3/pointer`, `exo3/tempo`, `exo3/unrol` : binaires natifs déjà générés (les versions RISC-V sont `*.riscv` après compilation).

@@ -108,7 +108,7 @@ Objectif : terminer **Exercice 3** (caches + miss rate avec gem5) et **Exercice 
 
 | Jour / objectif | Javier | Carlos | Maeva | Jair | Livrables du jour | Dépendances (minimiser) |
 |---|---|---|---|---|---|---|
-| **Lun 09/02** — Kick-off + jalon “binaires prêts” | Met en place l’arborescence `tp4/{runs,results,figures,report}` + gabarit `manifest.csv`. Compile **P1** (matmul) en RISC-V statique + 1 *smoke run* gem5 (C1) pour valider l’extraction des miss rates. | Patch/valide les Makefiles MiBench + compile **Dijkstra** en RISC-V statique + 1 *smoke run* gem5. Compile aussi **P2** (matmul) en RISC-V statique. | Compile **P3** (matmul) en RISC-V statique + *smoke run* gem5. Prépare le brouillon du Tableau 8 (mapping paramètres gem5 C1/C2). | Installe/valide CACTI (28nm sinon 32nm) + relève Q6 (paramètres par défaut). Compile **P4** (matmul) en RISC-V statique. | **Jalon M0 “binaires prêts”** : P1–P4 + Dijkstra (et idéalement BlowFish) + au moins 2 *smoke runs* gem5 + `results/manifest.csv` + conventions de nommage. | `riscv64-linux-gnu-gcc` opérationnel + sources accessibles. |
+| **Lun 09/02** — Kick-off + jalon “binaires prêts” | Met en place l’arborescence `{runs,results,figures,report}` + gabarit `manifest.csv`. Compile **P1** (matmul) en RISC-V statique + 1 *smoke run* gem5 (C1) pour valider l’extraction des miss rates. | Patch/valide les Makefiles MiBench + compile **Dijkstra** en RISC-V statique + 1 *smoke run* gem5. Compile aussi **P2** (matmul) en RISC-V statique. | Compile **P3** (matmul) en RISC-V statique + *smoke run* gem5. Prépare le brouillon du Tableau 8 (mapping paramètres gem5 C1/C2). | Installe/valide CACTI (28nm sinon 32nm) + relève Q6 (paramètres par défaut). Compile **P4** (matmul) en RISC-V statique. | **Jalon M0 “binaires prêts”** : P1–P4 + Dijkstra (et idéalement BlowFish) + au moins 2 *smoke runs* gem5 + `results/manifest.csv` + conventions de nommage. | `riscv64-linux-gnu-gcc` opérationnel + sources accessibles. |
 | **Mar 10/02** — Ex3 runs + Sync #1 (alignement extraction) | **Ex3** : lance **P1** sur **C1 & C2** (2 runs). Extrait miss rates il1/dl1/l2. (Si BlowFish manque : aide Carlos à le compiler.) | **Ex3** : lance **P2** sur **C1 & C2** (2 runs). Compile/valide **BlowFish** (MiBench) si pas terminé + partage binaires/commandes. | **Ex3** : lance **P3** sur **C1 & C2** (2 runs). Commence Q3 (localité code) + valide le format CSV. | **Ex3** : lance **P4** sur **C1 & C2** (2 runs). Prépare templates CACTI (cfg générables) pour L1 A7/A15 + L2. | Tableaux 9–11 complétés à 100% + Tableau 8 figé. **Sync #1** : conventions stats + chemins + format CSV. | Dépendances minimisées : chaque membre compile son P# ; MiBench validé au plus tard fin J2. |
 | **Mer 11/02** — Profiling + début sweeps perf (50–60% runs) | **Profiling Dijkstra** (1 run) + **A15/Dijkstra** : tailles L1 **2/4/8KB** (3 runs). Dépose stats + CSV IPC/cycles. | **Profiling BlowFish** (1 run) + **A7/BlowFish** : tailles L1 **1/2/4KB** (3 runs). | **A7/Dijkstra** : tailles L1 **1/2/4KB** (3 runs). Début figures Q4 (gabarit plot). | **A15/BlowFish** : tailles L1 **2/4/8KB** (3 runs). Lance CACTI “baseline” (L1 32KB + L2 512KB) pour A7/A15. | `results/ex4_profiling.csv` (brouillon), `results/ex4_*_sweep.csv` partiels, scripts d’extraction (même colonnes). | Binaires Dijkstra/BlowFish **validés** (jalon M0/J2). |
 | **Jeu 12/02** — Fin sweeps perf + extraction homogène | **A15/Dijkstra** : tailles **16/32KB** (2 runs). Début analyse Q5 (tendance + meilleur L1). | **A7/BlowFish** : tailles **8/16KB** (2 runs). Commence analyse Q4 (BlowFish). | **A7/Dijkstra** : tailles **8/16KB** (2 runs). Commence analyse Q4 (Dijkstra). | **A15/BlowFish** : tailles **16/32KB** (2 runs). CACTI : sweep complet L1 A7 (1→16KB) + L2 A7 (512KB). | Datasets Ex4 complets côté perf (20 runs) + 1ère version figures IPC vs L1 (A7/A15). | Aucun si binaires OK ; sinon replanifier compilation en priorité. |
@@ -121,12 +121,12 @@ Objectif : terminer **Exercice 3** (caches + miss rate avec gem5) et **Exercice 
 
 ## C) Standard de travail (très bref)
 
-### Arborescence recommandée (dans `tp4/`)
-- `tp4/runs/gem5/<ex>/<core>/<app>/<run_id>/` : `command.txt`, `config.ini`, `stats.txt`, `stdout.log`
-- `tp4/runs/cacti/cfg/` et `tp4/runs/cacti/out/`
-- `tp4/results/` : CSV consolidés (`ex3_missrates.csv`, `ex4_*_sweep.csv`, `cacti_areas.csv`, `derived_efficiency.csv`)
-- `tp4/figures/` : figures exportées (PNG/PDF)
-- `tp4/report/` : sources du rapport + PDF
+### Arborescence recommandée (dans ``)
+- `runs/gem5/<ex>/<core>/<app>/<run_id>/` : `command.txt`, `config.ini`, `stats.txt`, `stdout.log`
+- `runs/cacti/cfg/` et `runs/cacti/out/`
+- `results/` : CSV consolidés (`ex3_missrates.csv`, `ex4_*_sweep.csv`, `cacti_areas.csv`, `derived_efficiency.csv`)
+- `figures/` : figures exportées (PNG/PDF)
+- `report/` : sources du rapport + PDF
 
 ### Convention de nommage des expériences
 - Format conseillé : `ex{3|4}_{core}_{app}_L1i{X}_L1d{X}_L2{Y}_blk{B}_a{assoc}_bp{type}_{date}_{owner}`
