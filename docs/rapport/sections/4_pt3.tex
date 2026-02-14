@@ -1,0 +1,232 @@
+\subsection{Q11 : Efficacité énergétique}
+
+\paragraph{Rappel méthodologique.}
+L'efficacité énergétique est définie comme le rapport entre la performance obtenue (IPC) et la puissance consommée à fréquence maximale :
+
+\[
+\mathrm{Efficacité\ énergétique} = \frac{IPC}{P\ (mW)}.
+\]
+
+Les puissances maximales ont été déterminées à la question Q10 à partir des consommations en mW/MHz et des fréquences maximales.
+
+\paragraph{Puissance maximale des processeurs.}
+
+Pour le Cortex A7 :
+\[
+P_{A7} = 0.10\ \text{mW/MHz} \times 1000\ \text{MHz} = 100\ \text{mW}.
+\]
+
+Pour le Cortex A15 :
+\[
+P_{A15} = 0.20\ \text{mW/MHz} \times 2500\ \text{MHz} = 500\ \text{mW}.
+\]
+
+Ainsi :
+\[
+P_{A7} = 100\ \text{mW}, \quad P_{A15} = 500\ \text{mW}.
+\]
+
+\subsection*{Cortex A7}
+
+\begin{table}[h]
+\centering
+\scriptsize
+\caption{Efficacité énergétique du Cortex A7 en fonction de la taille du cache L1.}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{L1 (KB)} & \textbf{IPC} & \textbf{Efficacité énergétique} ($IPC/100$) \\
+\hline
+1  &  &  \\
+2  &  &  \\
+4  &  &  \\
+8  &  &  \\
+16 &  &  \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection*{Cortex A15}
+
+\begin{table}[h]
+\centering
+\scriptsize
+\caption{Efficacité énergétique du Cortex A15 en fonction de la taille du cache L1.}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{L1 (KB)} & \textbf{IPC} & \textbf{Efficacité énergétique} ($IPC/500$) \\
+\hline
+2  &  &  \\
+4  &  &  \\
+8  &  &  \\
+16 &  &  \\
+32 &  &  \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Analyse qualitative attendue.}
+
+L'efficacité énergétique augmente lorsque l'IPC augmente, c'est-à-dire lorsque la réduction des cache misses améliore l'utilisation des unités de calcul.
+
+Cependant, malgré un IPC généralement plus élevé pour le Cortex A15, sa consommation énergétique est cinq fois supérieure à celle du Cortex A7 (500 mW contre 100 mW). Ainsi, l'amélioration d'IPC doit être suffisamment significative pour compenser ce surcoût énergétique.
+
+On s'attend donc à observer :
+
+\begin{itemize}
+    \item Une amélioration de l'efficacité énergétique lorsque la taille du L1 augmente jusqu'à un point de saturation.
+    \item Une stabilisation des gains au-delà d'une certaine taille de cache (rendements décroissants).
+    \item Une efficacité énergétique globalement supérieure pour le Cortex A7, en raison de sa consommation nettement plus faible.
+\end{itemize}
+
+En conclusion, le Cortex A7 devrait offrir un meilleur compromis performance/énergie pour des charges modérées, tandis que le Cortex A15 privilégie la performance brute au détriment de la consommation.
+
+
+\subsection{Q12: Architecture big.LITTLE}
+
+\paragraph{Objectif.}
+L'architecture big.LITTLE associe un cœur \emph{économe} (A7) et un cœur \emph{performant} (A15).
+Pour chaque application, on souhaite proposer une configuration de caches L1 (\(I\text{-}L1\) et \(D\text{-}L1\) de même taille)
+qui offre le meilleur compromis \emph{performance/énergie} à fréquence maximale, en s'appuyant sur les résultats des questions
+Q10--Q11 \cite{TP4}.
+
+\paragraph{Principe de décision (règle utilisée).}
+Pour chaque processeur et chaque application, on retient :
+\begin{itemize}
+    \item la configuration de \(L1\) située au \emph{coude} des courbes (rendement décroissant), c.-à-d. la plus petite taille
+    de \(L1\) à partir de laquelle l'IPC n'augmente plus significativement ;
+    \item et/ou la configuration maximisant l'efficacité énergétique \(E = IPC/P\).
+\end{itemize}
+Cette stratégie reflète un choix “concepteur” : éviter d'augmenter \(L1\) lorsque le gain de performance devient marginal.
+
+\subsection{Recommandation pour Dijkstra}
+
+\paragraph{Cortex A7.}
+D'après les résultats de Q11, l'efficacité énergétique de Dijkstra sur A7 est maximale (ou proche du maximum) pour
+\(L1 = \textbf{[\,\underline{...}\,]}\,\mathrm{KB}\).
+Au-delà, l'IPC progresse faiblement tandis que l'intérêt énergétique devient marginal.
+Nous proposons donc :
+\[
+L1_{A7}^{(\mathrm{Dijkstra})} = \textbf{[\,\underline{...}\,]}\ \mathrm{KB}.
+\]
+
+\paragraph{Cortex A15.}
+Sur A15, l'IPC est supérieur mais la consommation est plus élevée, ce qui réduit l'efficacité énergétique.
+Les résultats montrent un coude / plateau à \(L1 = \textbf{[\,\underline{...}\,]}\,\mathrm{KB}\).
+Nous proposons :
+\[
+L1_{A15}^{(\mathrm{Dijkstra})} = \textbf{[\,\underline{...}\,]}\ \mathrm{KB}.
+\]
+
+\paragraph{Synthèse Dijkstra.}
+La configuration big.LITTLE recommandée pour Dijkstra est :
+\[
+(A7, A15) = (\textbf{[\,\underline{...}\,]}\ \mathrm{KB},\ \textbf{[\,\underline{...}\,]}\ \mathrm{KB}).
+\]
+
+\subsection{Recommandation pour Blowfish}
+
+\paragraph{Cortex A7.}
+Pour Blowfish, les résultats de Q11 indiquent que l'efficacité énergétique sur A7 est optimale (ou quasi optimale) pour
+\(L1 = \textbf{[\,\underline{...}\,]}\,\mathrm{KB}\).
+Nous proposons :
+\[
+L1_{A7}^{(\mathrm{Blowfish})} = \textbf{[\,\underline{...}\,]}\ \mathrm{KB}.
+\]
+
+\paragraph{Cortex A15.}
+Pour A15, l'augmentation de \(L1\) améliore l'IPC jusqu'à \(L1 = \textbf{[\,\underline{...}\,]}\,\mathrm{KB}\), puis les gains deviennent faibles.
+Au regard de l'efficacité énergétique, on retient :
+\[
+L1_{A15}^{(\mathrm{Blowfish})} = \textbf{[\,\underline{...}\,]}\ \mathrm{KB}.
+\]
+
+\paragraph{Synthèse Blowfish.}
+La configuration big.LITTLE recommandée pour Blowfish est :
+\[
+(A7, A15) = (\textbf{[\,\underline{...}\,]}\ \mathrm{KB},\ \textbf{[\,\underline{...}\,]}\ \mathrm{KB}).
+\]
+
+\paragraph{Discussion générale.}
+On s'attend à ce que le cœur A7 soit privilégié lorsque la contrainte énergétique domine (efficacité élevée),
+tandis que le cœur A15 est mobilisé lorsque la performance brute est requise.
+Les tailles retenues correspondent au meilleur compromis observé entre gain d'IPC et coût énergétique,
+en évitant les configurations où l'augmentation de \(L1\) n'apporte plus de bénéfice notable.
+
+
+\subsection{Q13 : équivalence des configurations et compromis}
+
+\paragraph{Comparaison des configurations optimales.}
+Les tailles de cache L1 retenues pour Dijkstra et Blowfish ne sont pas nécessairement identiques.
+Cette différence s'explique par la nature distincte des applications :
+\begin{itemize}
+    \item Dijkstra présente une pression importante sur le contrôle et la mémoire,
+    \item Blowfish est davantage dominée par le calcul entier.
+\end{itemize}
+
+Ainsi, la taille optimale de L1 peut différer selon le profil microarchitectural de la charge.
+
+\paragraph{équivalence.}
+Si les tailles optimales obtenues pour les deux applications sont différentes
+(par exemple \(L1 = \textbf{[\,\underline{...}\,]}\,\mathrm{KB}\) pour Dijkstra et
+\(L1 = \textbf{[\,\underline{...}\,]}\,\mathrm{KB}\) pour Blowfish),
+alors les configurations ne sont pas strictement équivalentes.
+
+En revanche, si les performances et l'efficacité énergétique restent proches
+dans une même plage de tailles, on peut considérer les configurations comme quasi équivalentes.
+
+\paragraph{Proposition de compromis.}
+Dans un système réel, le cache L1 est fixe et ne peut être redimensionné dynamiquement.
+Il est donc pertinent de choisir une taille offrant :
+\begin{itemize}
+    \item une performance proche de l'optimum pour les deux applications,
+    \item une efficacité énergétique satisfaisante,
+    \item un coût en surface raisonnable.
+\end{itemize}
+
+Nous proposons ainsi un compromis à
+\(L1 = \textbf{[\,\underline{...}\,]}\,\mathrm{KB}\),
+correspondant au meilleur équilibre global observé.
+
+\paragraph{Conclusion sur les applications étudiées.}
+Les résultats montrent que le dimensionnement optimal du cache dépend
+fortement du profil applicatif.
+Les applications orientées contrôle/mémoire bénéficient davantage
+d'un L1 suffisamment dimensionné pour réduire les miss,
+tandis que les charges compute-heavy sont plus sensibles
+au débit des unités de calcul qu'à l'augmentation excessive du cache.
+
+
+\subsection{Q14 : Approche méthodologique pour la spécification d'une architecture}
+
+La conception d'une architecture destinée à exécuter plusieurs applications
+dans un domaine spécifique doit suivre une approche systématique :
+
+\begin{enumerate}
+    \item \textbf{Profiling représentatif :}
+    Identifier un ensemble d'applications représentatives du domaine
+    et mesurer leur instruction mix ainsi que leurs métriques de performance.
+
+    \item \textbf{Identification des pressions dominantes :}
+    Déterminer si les charges sont principalement
+    compute-bound, memory-bound ou control-bound.
+
+    \item \textbf{Exploration paramétrique :}
+    Faire varier les paramètres microarchitecturaux clés
+    (taille des caches, largeur pipeline, prédiction de branchement, etc.)
+    afin d'observer leur impact sur les métriques de performance,
+    d'énergie et de surface.
+
+    \item \textbf{Analyse multi-critères :}
+    évaluer les compromis performance/énergie/surface
+    à l'aide d'indicateurs normalisés (IPC, efficacité énergétique,
+    efficacité surfacique).
+
+    \item \textbf{Choix robuste :}
+    Sélectionner une configuration offrant des performances stables
+    sur l'ensemble des applications,
+    même si elle n'est pas optimale pour chacune individuellement.
+\end{enumerate}
+
+Cette approche permet de concevoir une architecture équilibrée,
+robuste et adaptée au domaine cible,
+plutôt qu'optimisée pour un cas particulier.
