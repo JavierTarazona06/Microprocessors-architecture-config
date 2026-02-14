@@ -163,3 +163,5 @@ _minted*/
 *.riscv
 *.elf
 *.bin
+
+*.enc

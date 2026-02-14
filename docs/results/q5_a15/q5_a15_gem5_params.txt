@@ -1,0 +1,13 @@
+Q5 A15 gem5 run parameters
+- CPU model: DerivO3CPU (out-of-order)
+- Config script: se_A15.py
+- L2 cache: 512kB, assoc=16, block=64B (fixed)
+- L1 sweep: I-L1 = D-L1 = 2kB, 4kB, 8kB, 16kB, 32kB
+- Branch predictor: LocalBP/BranchPredictor wrapper with BTB=256
+- Decode/Issue/Commit: 4/8/4
+- RUU/LSQ (gem5 mapping): ROB=16, LQ=16, SQ=16
+- Fetch queue: 8
+- Memory: DDR3_1600_8x8, mem-size=2GB
+- Clock: 2GHz
+- Dataset: dijkstra input.dat, blowfish input_small.asc
+- Run directories: /home/javit/microprocesseurs/Microprocessors-architecture-config/tp4/runs/gem5/A15
