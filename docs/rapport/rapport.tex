@@ -140,6 +140,12 @@ contre \(44.09\%\) pour Dijkstra (+11.33 points). Les instructions FP sont négl
 qu'au noyau algorithmique).
 
 
+\subsection{Exercice 4 --- Q2 : Catégorie à améliorer}
+
+Sur \textbf{Dijkstra}, la part \textbf{contrôle} est élevée (\textbf{branches = 19.67\%}) et s’ajoute à une pression \textbf{mémoire} déjà importante (\textbf{load+store = 23.52\% + 9.68\% = 33.20\%}) : améliorer la \textbf{prédiction de branchements} (et réduire les bulles/flush) est donc un levier prioritaire pour ce code très \emph{branchy}.  
+Sur \textbf{Blowfish}, le profil est surtout \textbf{compute-heavy} en entier (\textbf{ALU = 55.42\%} avec \textbf{branches = 9.84\%}) : l’amélioration la plus pertinente concerne le \textbf{débit/latence des opérations entières} (ALU), tandis que la mémoire reste secondaire bien que non négligeable (\textbf{load+store = 34.75\%}).  
+Ainsi, la catégorie à optimiser dépend de l’application : \textbf{contrôle (branches) pour Dijkstra} et \textbf{calcul entier (ALU) pour Blowfish}.
+
 \begin{thebibliography}{00}
 
 %TODO Delete this and add the real references of the project
