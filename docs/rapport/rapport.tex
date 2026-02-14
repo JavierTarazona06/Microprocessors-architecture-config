@@ -5,6 +5,9 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{url}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{float}
 
 \begin{document}
 
@@ -68,7 +71,8 @@
 
 %\input{sections/detectors.tex}
 
-\section{Exercice 4 --- Profiling (Q1)}
+\section{Exercice 4}
+\subsection{Q1 : Profiling}
 \paragraph{Objectif.}
 Le \emph{profiling} de l'\emph{instruction mix} consiste à mesurer la répartition des instructions exécutées par grandes catégories
 (calcul entier, mémoire, contrôle, etc.). Cette information est essentielle en architecture : elle permet d'identifier
@@ -86,7 +90,9 @@ Pour chaque catégorie \(c\), on note \(I_c\) le nombre d'instructions appartena
 Les valeurs sont arrondies à deux décimales (somme \(\approx 100\%\)).
 
 \paragraph{Résultats détaillés.}
-\begin{table}[h]
+(\texttt{dijkstra\_large} et \texttt{blowfish\_large}) sur A7. On observe que les catégories dominantes sont :
+~\
+\begin{table}[H]
 \centering
 \scriptsize
 \caption{Répartition des instructions exécutées (profiling) --- configuration A7.}
@@ -206,6 +212,252 @@ Autres                & 55       & 0.00\% \\
 \hline
 \end{tabular}
 \end{table}
+
+\subsection{Q4 : Impact de la taille de L1 (Cortex-A7, entrées \texttt{large})}
+L’objectif est d’évaluer la sensibilité des applications à la hiérarchie mémoire en faisant varier la taille de la cache L1
+(1, 2, 4, 8, 16\,KB), tout en conservant le même jeu de données (\texttt{large}) et la même configuration globale.
+Les métriques principales sont la performance (\texttt{IPC}, \texttt{numCycles}) et les taux de miss des caches (I-L1, D-L1, L2).
+On vérifie que \texttt{simInsts} reste constant pour un même binaire : Dijkstra (\texttt{simInsts}=227\,442\,465) et Blowfish (\texttt{simInsts}=12\,761\,206).
+~\\
+\paragraph{Performance (IPC et cycles).}
+~\
+\begin{table}[H]
+\centering
+\small
+\caption{Cortex-A7 (large) --- Performance en fonction de la taille L1}
+\label{tab:q4_a7_perf}
+\begin{tabular}{|c|cc|cc|}
+\hline
+\multirow{2}{*}{\textbf{L1 (KB)}} &
+\multicolumn{2}{c|}{\textbf{Dijkstra}} &
+\multicolumn{2}{c|}{\textbf{Blowfish}} \\
+\cline{2-5}
+& \textbf{IPC} & \textbf{Cycles ($\times 10^6$)} & \textbf{IPC} & \textbf{Cycles ($\times 10^6$)} \\
+\hline
+1  & 0.233 & 974.9 & 0.248 & 51.4 \\
+2  & 0.242 & 941.5 & 0.255 & 50.0 \\
+4  & 0.251 & 905.1 & 0.268 & 47.7 \\
+8  & 0.271 & 838.3 & 0.295 & 43.3 \\
+16 & 0.277 & 820.6 & 0.296 & 43.1 \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Comportement cache (miss rates).}
+~\
+\begin{table}[H]
+\centering
+\small
+\caption{A7 (large) --- Miss rates et branchements (mispred\_rate en \%)}
+\label{tab:q4_a7_cache}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|c|ccc|c|ccc|c|}
+\hline
+\multirow{2}{*}{\textbf{L1 (KB)}} &
+\multicolumn{4}{c|}{\textbf{Dijkstra}} &
+\multicolumn{4}{c|}{\textbf{Blowfish}} \\
+\cline{2-9}
+& \textbf{I-L1} & \textbf{D-L1} & \textbf{L2} & \textbf{mispred (\%)} &
+  \textbf{I-L1} & \textbf{D-L1} & \textbf{L2} & \textbf{mispred (\%)} \\
+\hline
+1  & 0.0468 & 0.2171 & 0.0002 & 1.36 & 0.3083 & 0.1936 & 0.0015 & 1.40 \\
+2  & 0.0341 & 0.1767 & 0.0002 & 1.36 & 0.1263 & 0.1581 & 0.0024 & 1.40 \\
+4  & 0.0122 & 0.1361 & 0.0003 & 1.36 & 0.0040 & 0.1063 & 0.0048 & 1.40 \\
+8  & 0.0045 & 0.0677 & 0.0006 & 1.35 & 0.0007 & 0.0227 & 0.0246 & 1.40 \\
+16 & 0.0010 & 0.0499 & 0.0009 & 1.35 & 0.0006 & 0.0181 & 0.0318 & 1.40 \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+% -------- Figure 1: IPC + Cycles --------
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.48\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{../../tp4/figures/ex4_large/A7_ipc_vs_l1.png}
+  \caption{IPC en fonction de la taille de L1.}
+  \label{fig:q4_a7_ipc}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.48\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{../../tp4/figures/ex4_large/A7_cycles_vs_l1.png}
+  \caption{\texttt{numCycles} vs taille L1 (performance globale).}
+  \label{fig:q4_a7_cycles}
+\end{subfigure}
+\label{fig:q4_a7_perf}
+\end{figure}
+
+% -------- Figure 2: L1 I/D miss --------
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.48\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{../../tp4/figures/ex4_large/A7_il1_miss_vs_l1.png}
+  \caption{Miss rate I-L1 vs taille L1.}
+  \label{fig:q4_a7_il1}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.48\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{../../tp4/figures/ex4_large/A7_dl1_miss_vs_l1.png}
+  \caption{Miss rate D-L1 vs taille L1.}
+  \label{fig:q4_a7_dl1}
+\end{subfigure}
+\label{fig:q4_a7_l1_miss}
+\end{figure}
+
+% -------- Figure 3: L2 miss + Mispred --------
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.48\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{../../tp4/figures/ex4_large/A7_l2_miss_vs_l1.png}
+  \caption{Miss rate L2 (conditionné aux accès L2) vs taille L1.}
+  \label{fig:q4_a7_l2}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.48\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{../../tp4/figures/ex4_large/A7_mispred_vs_l1.png}
+  \caption{Taux de mauvaise prédiction (\textit{mispred rate}) vs taille L1.}
+  \label{fig:q4_a7_mispred}
+\end{subfigure}
+\label{fig:q4_a7_l2_branch}
+\end{figure}
+
+\paragraph{(A7).}
+En augmentant L1 de 1\,KB à 16\,KB, on observe un gain net de performance :
+\textbf{IPC} passe de 0.233 à 0.277 pour Dijkstra (+18.8\%) et de 0.248 à 0.296 pour Blowfish (+19.4\%),
+avec une baisse correspondante de \textbf{cycles} d’environ 16\% dans les deux cas (Table~\ref{tab:q4_a7_perf}).
+Ces gains sont principalement expliqués par la chute des miss rates L1 (Table~\ref{tab:q4_a7_cache}) :
+Dijkstra réduit fortement ses misses D-L1 (0.217 $\rightarrow$ 0.050, soit -77\%) mais reste plus pénalisé à cause d’accès moins réguliers,
+tandis que Blowfish devient très efficace dès 8\,KB (D-L1 $\approx$ 0.023) avec un rendement décroissant ensuite (8$\rightarrow$16\,KB : +0.6\% seulement en IPC).
+Le \textbf{mispred rate} reste quasi constant (environ 1.35\% pour Dijkstra et 1.40\% pour Blowfish), indiquant que l’amélioration provient surtout de la hiérarchie mémoire plutôt que du contrôle.
+Ainsi, en termes de performance pure, la meilleure configuration parmi celles testées est \textbf{L1=16\,KB} pour les deux applications sur A7,
+avec une saturation visible autour de \textbf{8\,KB} (notamment pour Blowfish).
+
+\subsection{Q5 : Impact de la taille de L1 (Cortex-A5, entrées \texttt{large})}
+
+On étudie l'impact de la \textbf{taille de la cache L1} sur les performances du coeur \textbf{A15}
+pour deux applications (\texttt{dijkstra\_large} et \texttt{blowfish\_large}).
+Comme le nombre d'instructions est (quasi) constant pour une application donnée
+(\texttt{simInsts}), une variation de \texttt{numCycles} se traduit directement par une variation d'IPC
+(\(\texttt{IPC}=\texttt{simInsts}/\texttt{numCycles}\)).
+On interprète les tendances via les \textbf{miss rates} (I-L1, D-L1, L2) et le \textbf{taux de mauvaise prédiction}
+(\texttt{mispred\_rate}).
+
+~\
+\paragraph{Performance (IPC et cycles).}
+~\
+\begin{table}[H]
+\centering
+\small
+\caption{Cortex-A15 (large) --- Performance en fonction de la taille L1}
+\label{tab:q5_a15_perf}
+\begin{tabular}{|c|cc|cc|}
+\hline
+\multirow{2}{*}{\textbf{L1 (KB)}} &
+\multicolumn{2}{c|}{\textbf{Dijkstra}} &
+\multicolumn{2}{c|}{\textbf{Blowfish}} \\
+\cline{2-5}
+& \textbf{IPC} & \textbf{Cycles ($\times 10^6$)} & \textbf{IPC} & \textbf{Cycles ($\times 10^6$)} \\
+\hline
+2  & 0.685 & 332.0 & 1.094 & 11.7 \\
+4  & 0.749 & 303.6 & 1.191 & 10.7 \\
+8  & 0.925 & 245.8 & 1.458 & 8.7 \\
+16 & 0.996 & 228.4 & 1.489 & 8.6 \\
+32 & 1.161 & 195.8 & 1.636 & 7.8 \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Comportement cache (miss rates).}
+~\
+\begin{table}[H]
+\centering
+\small
+\caption{A15 (large) --- Miss rates et branchements (mispred\_rate en \%)}
+\label{tab:q5_a15_cache_branch}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{|c|ccc|c|ccc|c|}
+\hline
+\multirow{2}{*}{\textbf{L1 (KB)}} &
+\multicolumn{4}{c|}{\textbf{Dijkstra}} &
+\multicolumn{4}{c|}{\textbf{Blowfish}} \\
+\cline{2-9}
+& \textbf{I-L1} & \textbf{D-L1} & \textbf{L2} & \textbf{mispred (\%)} &
+  \textbf{I-L1} & \textbf{D-L1} & \textbf{L2} & \textbf{mispred (\%)} \\
+\hline
+2  & 0.0500 & 0.1703 & 0.0001 & 1.56 & 0.1159 & 0.2062 & 0.0016 & 1.35 \\
+4  & 0.0265 & 0.1278 & 0.0002 & 1.55 & 0.0058 & 0.1417 & 0.0027 & 1.43 \\
+8  & 0.0116 & 0.0661 & 0.0004 & 1.56 & 0.0008 & 0.0402 & 0.0125 & 1.39 \\
+16 & 0.0020 & 0.0465 & 0.0005 & 1.55 & 0.0006 & 0.0349 & 0.0163 & 1.39 \\
+32 & 0.0016 & 0.0108 & 0.0022 & 1.55 & 0.0005 & 0.0008 & 0.6820 & 1.35 \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+% --- Figure 1: IPC + cycles
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.49\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{../../tp4/figures/ex4_large/A15_ipc_vs_l1.png}
+  \caption{IPC en fonction de la taille de L1.}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.49\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{../../tp4/figures/ex4_large/A15_cycles_vs_l1.png}
+  \caption{numCycles vs taille L1 (performance globale).}
+\end{subfigure}
+\label{fig:q5_a15_perf}
+\end{figure}
+
+% --- Figure 2: L1 I/D miss
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.49\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{../../tp4/figures/ex4_large/A15_il1_miss_vs_l1.png}
+  \caption{Miss rate I-L1 vs taille L1.}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.49\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{../../tp4/figures/ex4_large/A15_dl1_miss_vs_l1.png}
+  \caption{Miss rate D-L1 vs taille L1.}
+\end{subfigure}
+\label{fig:q5_a15_l1_miss}
+\end{figure}
+
+% --- Figure 3: L2 miss + mispred
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.49\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{../../tp4/figures/ex4_large/A15_l2_miss_vs_l1.png}
+  \caption{Miss rate L2 (conditionné aux accès L2) vs taille L1.}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.49\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{../../tp4/figures/ex4_large/A15_mispred_vs_l1.png}
+  \caption{Taux de mauvaise prédiction (mispred rate) vs taille L1.}
+\end{subfigure}
+\label{fig:q5_a15_l2_branch}
+\end{figure}
+
+\paragraph{(A15).}
+Sur A15, l'augmentation de la taille L1 réduit fortement les \textbf{misses L1} (I et D), ce qui diminue
+\texttt{numCycles} et augmente l'IPC. Le gain est particulièrement marqué entre 4KB et 8KB (diminution nette des
+misses), puis les rendements deviennent décroissants. Le \textbf{taux de mauvaise prédiction} varie très peu avec L1,
+ce qui indique que l'amélioration provient majoritairement de la \textbf{hiérarchie mémoire} (et non du front-end branchement).
+Le point à retenir est donc que, pour ces workloads \texttt{large}, la performance A15 est fortement corrélée
+à la capacité de L1 à absorber le working set (surtout en données pour Dijkstra).
 
 \begin{thebibliography}{00}
 
