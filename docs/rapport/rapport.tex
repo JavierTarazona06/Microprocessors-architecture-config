@@ -68,6 +68,77 @@
 
 %\input{sections/detectors.tex}
 
+\section{Exercice 4 --- Profiling (Q1)}
+\paragraph{Objectif.}
+Le \emph{profiling} de l'\emph{instruction mix} consiste à mesurer la répartition des instructions exécutées par grandes catégories
+(calcul entier, mémoire, contrôle, etc.). Cette information est essentielle en architecture : elle permet d'identifier
+\emph{où se situe la pression dominante} (unités de calcul, hiérarchie mémoire, prédiction de branchements), et donc
+d'anticiper quels leviers microarchitecturaux sont les plus pertinents.
+
+\paragraph{Méthode.}
+Nous avons simulé les exécutions avec gem5 en mode SE (ISA RISC-V), en configuration de type A7 (\texttt{se\_A7.py}).
+Les compteurs proviennent des instructions \emph{committed} (retired). Le nombre total d'instructions exécutées est
+\(N = \texttt{simInsts}\).
+Pour chaque catégorie \(c\), on note \(I_c\) le nombre d'instructions appartenant à \(c\). Le pourcentage associé est :
+\[
+\mathrm{pct}(c) = 100 \times \frac{I_c}{N}.
+\]
+Les valeurs sont arrondies à deux décimales (somme \(\approx 100\%\)).
+
+\paragraph{Résultats détaillés.}
+\begin{table}[h]
+\centering
+\scriptsize
+\caption{Répartition des instructions exécutées (profiling) --- configuration A7.}
+\label{tab:ex4_q1_profiling}
+\begin{tabular}{|l|r|r|r|r|}
+\hline
+\textbf{Catégorie} & \multicolumn{2}{c|}{\textbf{Dijkstra (A7)}} & \multicolumn{2}{c|}{\textbf{Blowfish (A7)}} \\
+\cline{2-5}
+ & \textbf{Count} & \textbf{\%} & \textbf{Count} & \textbf{\%} \\
+\hline
+ALU entier & 22118141 & 44.09\% & 1882443 & 55.42\% \\
+Chargements (Load) & 11799269 & 23.52\% & 771841 & 22.72\% \\
+Stockages (Store) & 4853941 & 9.68\% & 408487 & 12.03\% \\
+Branches (contrôle) & 9870255 & 19.67\% & 334128 & 9.84\% \\
+Mult/Div entier & 1517371 & 3.02\% & 6 & 0.00\% \\
+Flottant (FP) & 12 & 0.00\% & 12 & 0.00\% \\
+Autres & 10476 & 0.02\% & 18 & 0.00\% \\
+\hline
+\textbf{TOTAL} (\(\texttt{simInsts}\)) & \textbf{50169465} & \textbf{100.00\%} & \textbf{3396935} & \textbf{100.00\%} \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Synthèse par familles (lecture plus “architecture”).}
+Afin de mieux comparer les pressions microarchitecturales, on regroupe les catégories en trois familles :
+\emph{calcul entier} (ALU + Mult/Div), \emph{mémoire} (Load + Store) et \emph{contrôle} (Branches).
+
+\begin{table}[h]
+\centering
+\scriptsize
+\caption{Agrégation par familles : calcul, mémoire et contrôle (A7).}
+\label{tab:ex4_q1_profiling_agg}
+\begin{tabular}{|l|r|r|r|}
+\hline
+\textbf{Famille} & \textbf{Dijkstra (\%)} & \textbf{Blowfish (\%)} & \textbf{$\Delta$ (BF -- Dij) [points]} \\
+\hline
+Calcul entier (ALU + Mult/Div) & 47.11 & 55.42 & +8.31 \\
+Mémoire (Load + Store) & 33.20 & 34.75 & +1.55 \\
+Contrôle (Branches) & 19.67 & 9.84 & -9.83 \\
+Reste (FP + Autres) & $\approx 0.02$ & $\approx 0.00$ & $\approx 0$ \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Interprétation (comparaison chiffrée).}
+Les deux applications présentent une part mémoire comparable (\(\approx 33.20\%\) pour Dijkstra contre \(\approx 34.75\%\) pour Blowfish),
+ce qui indique que la hiérarchie mémoire (L1/L2) reste un levier important dans les deux cas.
+En revanche, Dijkstra est nettement plus \emph{control-heavy} : les branches représentent \(19.67\%\) des instructions contre \(9.84\%\) pour Blowfish,
+soit environ \(\times 2\) de densité de contrôle. À l'inverse, Blowfish est davantage \emph{compute-heavy} : la part d'ALU entier atteint \(55.42\%\)
+contre \(44.09\%\) pour Dijkstra (+11.33 points). Les instructions FP sont négligeables (quelques occurrences attribuables à un surcoût du runtime plutôt
+qu'au noyau algorithmique).
+
 
 \begin{thebibliography}{00}
 

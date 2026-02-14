@@ -1,0 +1,33 @@
+Generando tabla de análisis para Q1 en resultados_Q1.txt...
+--------------------------------------------------------
+ ANALIZANDO: DIJKSTRA (A7)
+ Archivo: tp4/runs/gem5/A7/dijkstra_small/stats.txt
+--------------------------------------------------------
+CATEGORIA            | CANTIDAD        | PORCENTAJE
+----------           | --------        | ----------
+ALU Entero           | 22118141        | 44.09%
+Load (Carga)         | 11799269        | 23.52%
+Store (Guardar)      | 4853941         | 9.68%
+Branch (Saltos)      | 9870255         | 19.67%
+Mult/Div Entero      | 1517371         | 3.02%
+FP (Flotante)        | 12              | 0.00%
+Otros                | 10476           | 0.02%
+--------------------------------------------------------
+ TOTAL INSTRUCCIONES: 50169465
+
+--------------------------------------------------------
+ ANALIZANDO: BLOWFISH (A7)
+ Archivo: tp4/runs/gem5/A7/blowfish_small/stats.txt
+--------------------------------------------------------
+CATEGORIA            | CANTIDAD        | PORCENTAJE
+----------           | --------        | ----------
+ALU Entero           | 1882443         | 55.42%
+Load (Carga)         | 771841          | 22.72%
+Store (Guardar)      | 408487          | 12.03%
+Branch (Saltos)      | 334128          | 9.84%
+Mult/Div Entero      | 6               | 0.00%
+FP (Flotante)        | 12              | 0.00%
+Otros                | 18              | 0.00%
+--------------------------------------------------------
+ TOTAL INSTRUCCIONES: 3396935
+
