@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import shlex
 import m5
 from m5.objects import *
 
@@ -79,9 +80,17 @@ def build_system(args):
     system.cpu.SQEntries = 8
 
     # Branch predictor : bimodal, BTB=256
-    # BiModeBP correspond au "bimodal/bi-mode" cote gem5 classic.
-    system.cpu.branchPred = BiModeBP()
-    system.cpu.branchPred.BTBEntries = 256
+    # gem5 >= 25 expects a BranchPredictor wrapper with a conditional predictor.
+    # Older trees may still accept assigning BiModeBP directly.
+    try:
+        system.cpu.branchPred = BranchPredictor(
+            conditionalBranchPred=BiModeBP(numThreads=system.cpu.numThreads)
+        )
+        system.cpu.branchPred.btb.numEntries = 256
+    except Exception:
+        system.cpu.branchPred = BiModeBP()
+        if hasattr(system.cpu.branchPred, "BTBEntries"):
+            system.cpu.branchPred.BTBEntries = 256
 
     # -------- Caches C-A7 --------
     # I-L1: 32KB / 32 / 2
@@ -117,7 +126,14 @@ def build_system(args):
     system.mem_ctrl.port = system.membus.mem_side_ports
 
     process = Process()
-    process.cmd = [args.cmd] + args.options
+    # Accept both forms:
+    # 1) --options arg1 arg2 ...
+    # 2) --options="arg1 arg2 ..."
+    # This keeps Block 0 commands reproducible across scripts.
+    options = args.options
+    if len(options) == 1:
+        options = shlex.split(options[0])
+    process.cmd = [args.cmd] + options
     system.workload = SEWorkload.init_compatible(args.cmd)
     system.cpu.workload = process
     system.cpu.createThreads()

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import shlex
 import m5
 from m5.objects import *
 
@@ -81,9 +82,17 @@ def build_system(args):
     system.cpu.SQEntries = 16
 
     # Branch predictor : "2 level", BTB=256
-    # En gem5 classic, LocalBP correspond a un 2-level local predictor.
-    system.cpu.branchPred = LocalBP()
-    system.cpu.branchPred.BTBEntries = 256
+    # gem5 >= 25 expects a BranchPredictor wrapper with a conditional predictor.
+    # Older trees may still accept assigning LocalBP directly.
+    try:
+        system.cpu.branchPred = BranchPredictor(
+            conditionalBranchPred=LocalBP(numThreads=system.cpu.numThreads)
+        )
+        system.cpu.branchPred.btb.numEntries = 256
+    except Exception:
+        system.cpu.branchPred = LocalBP()
+        if hasattr(system.cpu.branchPred, "BTBEntries"):
+            system.cpu.branchPred.BTBEntries = 256
 
     # -------- Caches C-A15 --------
     # I-L1: 32KB / 64 / 2
@@ -120,7 +129,14 @@ def build_system(args):
 
     # Workload SE
     process = Process()
-    process.cmd = [args.cmd] + args.options
+    # Accept both forms:
+    # 1) --options arg1 arg2 ...
+    # 2) --options="arg1 arg2 ..."
+    # This keeps Block 0 commands reproducible across scripts.
+    options = args.options
+    if len(options) == 1:
+        options = shlex.split(options[0])
+    process.cmd = [args.cmd] + options
     system.workload = SEWorkload.init_compatible(args.cmd)
     system.cpu.workload = process
     system.cpu.createThreads()

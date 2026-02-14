@@ -54,3 +54,17 @@ grep -E "simInsts|numLoadInsts|numStoreInsts|numBranches|numIntInsts|numFpInsts"
 ## Notes
 - Adaptez le chemin du binaire si votre dossier de travail est different.
 - Si `m5out/` existe deja, gem5 ecrasera les fichiers precedents.
+
+## Block 0 (TP4 Ex4) — Dijkstra + BlowFish (A7/A15)
+
+Script recommande (reproductible) :
+```bash
+cd /home/meneses/microprocesseur/Microprocessors-architecture-config
+bash tp4/scripts/block0_setup_and_smoketest.sh
+```
+
+Points importants :
+- Les executions gem5 utilisent `-d <outdir>`, donc `config.ini` et `stats.txt` sont produits dans ce dossier.
+- Pour BlowFish, passer les arguments via une seule chaine :
+  `--options="e <repo>/Projet/blowfish/input_small.asc <outdir>/output.enc 0123456789ABCDEF"`.
+- `command.txt` doit etre present dans chaque dossier de run. Si gem5 ne le genere pas, le script Block 0 le cree avec la commande exacte executee.

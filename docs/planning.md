@@ -139,5 +139,7 @@ Objectif : terminer **Exercice 3** (caches + miss rate avec gem5) et **Exercice 
 - Chaque figure = titre + axes + unités + légende + source (CSV).
 - Chaque tableau = valeurs traçables (ligne → run_path), cohérence kB/KB et mm²/mW.
 - Pour **chaque** run gem5 : `command.txt` présent + `config.ini` cohérent avec la taille L1/L2 demandée.
+- Pour **Block 0** (Dijkstra/BlowFish) : exécuter `tp4/scripts/block0_setup_and_smoketest.sh` et garder `--options="..."` (chaine unique) pour BlowFish.
+- Si gem5 ne génère pas `command.txt`, l’écrire avec la ligne de commande exacte utilisée pour le run.
 - Vérification croisée : 1 extraction de stats relue par un autre membre.
 - Couverture : Ex3 Q1–Q3 ; Ex4 Q1–Q12 (et Q13–Q14 si choisis).
