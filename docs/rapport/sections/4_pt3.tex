@@ -4,7 +4,7 @@
 L'efficacité énergétique est définie comme le rapport entre la performance obtenue (IPC) et la puissance consommée à fréquence maximale :
 
 \[
-\mathrm{Efficacité\ énergétique} = \frac{IPC}{P\ (mW)}.
+\text{Efficacité énergétique} = \frac{IPC}{P\ (\text{mW})}.
 \]
 
 Les puissances maximales ont été déterminées à la question Q10 à partir des consommations en mW/MHz et des fréquences maximales.
@@ -28,7 +28,7 @@ P_{A7} = 100\ \text{mW}, \quad P_{A15} = 500\ \text{mW}.
 
 \subsection*{Cortex A7}
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \scriptsize
 \caption{Efficacité énergétique du Cortex A7 en fonction de la taille du cache L1.}
@@ -47,7 +47,7 @@ P_{A7} = 100\ \text{mW}, \quad P_{A15} = 500\ \text{mW}.
 
 \subsection*{Cortex A15}
 
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
 \scriptsize
 \caption{Efficacité énergétique du Cortex A15 en fonction de la taille du cache L1.}
@@ -96,7 +96,7 @@ Pour chaque processeur et chaque application, on retient :
     de \(L1\) à partir de laquelle l'IPC n'augmente plus significativement ;
     \item et/ou la configuration maximisant l'efficacité énergétique \(E = IPC/P\).
 \end{itemize}
-Cette stratégie reflète un choix “concepteur” : éviter d'augmenter \(L1\) lorsque le gain de performance devient marginal.
+Cette stratégie reflète un choix ``concepteur'' : éviter d'augmenter \(L1\) lorsque le gain de performance devient marginal.
 
 \subsection{Recommandation pour Dijkstra}
 
