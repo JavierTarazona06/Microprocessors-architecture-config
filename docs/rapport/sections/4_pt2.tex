@@ -1,1 +1,91 @@
+\subsection{Q6 : état configuration de cache}
 
+Dans cache.cfg, les paramètres par défaut sont 32 KB (32768 Bytes) de cache, 
+64 B de bloc, associativité 2, et une technologie de 32 nm.
+
+\subsection{Q7 : efficacité surfacique des caches L1}
+
+\paragraph{Paramètres de référence (Tableau 12).}
+Pour le Cortex A15, les caches \(I\)-L1 et \(D\)-L1 sont configurés en \(32\text{KB}/64/2\).
+Pour le Cortex A7, les caches \(I\)-L1 et \(D\)-L1 sont configurés en \(32\text{KB}/32/2\).
+
+\paragraph{Note de cohérence (technologie et unités).}
+Les fichiers CACTI utilisés ici (\texttt{result\_L1\_A15.txt} et \texttt{result\_L1\_A7.txt}) sont calculés à \(32\ \text{nm}\)
+(\texttt{Technology size (nm): 32}), alors que l'énoncé donne les surfaces totales des c\oe urs
+(\(2\ \text{mm}^2\) pour A15 et \(0.45\ \text{mm}^2\) pour A7) à \(28\ \text{nm}\).
+Pour être rigoureux, on normalise donc les surfaces de cache de \(32\ \text{nm}\) vers \(28\ \text{nm}\) avant de calculer les pourcentages.
+Par ailleurs, la technologie s'exprime en \(\text{nm}\) (et non en \(\text{mm}\)).
+
+\paragraph{Surface d'un cache L1 (sortie CACTI à 32 nm).}
+On utilise la métrique \texttt{Cache height x width (mm)} :
+\[
+A_{L1} = \text{height} \times \text{width}.
+\]
+
+Pour A15 :
+\[
+A_{L1,A15}^{(1)} = 0.265667 \times 0.175632 = 0.046660\ \text{mm}^2.
+\]
+
+Pour A7 :
+\[
+A_{L1,A7}^{(1)} = 0.265667 \times 0.174962 = 0.046482\ \text{mm}^2.
+\]
+
+\paragraph{Surface totale des caches L1 à 32 nm (instructions + données).}
+Comme il y a deux caches L1 par c\oe ur (\(I\)-L1 et \(D\)-L1) :
+\[
+A_{L1,\text{tot}} = 2 \times A_{L1}^{(1)}.
+\]
+
+\[
+A_{L1,\text{tot},A15} = 0.093319\ \text{mm}^2,\quad
+A_{L1,\text{tot},A7} = 0.092963\ \text{mm}^2.
+\]
+
+\paragraph{Normalisation des surfaces L1 de 32 nm vers 28 nm.}
+En première approximation, la surface suit le carré du facteur de technologie :
+\[
+A_{28} = A_{32}\left(\frac{28}{32}\right)^2,
+\qquad
+\left(\frac{28}{32}\right)^2 = 0.765625.
+\]
+\[
+A_{L1,\text{tot},A15}^{(28)} = 0.093319 \times 0.765625 = 0.071448\ \text{mm}^2,
+\]
+\[
+A_{L1,\text{tot},A7}^{(28)} = 0.092963 \times 0.765625 = 0.071175\ \text{mm}^2.
+\]
+
+\paragraph{Part des L1 dans la surface totale des c\oe urs (base homogène 28 nm).}
+Avec les surfaces globales données dans l'énoncé (\(2\ \text{mm}^2\) pour A15, \(0.45\ \text{mm}^2\) pour A7, à \(28\ \text{nm}\)) :
+\[
+\%L1 = \frac{A_{L1,\text{tot}}^{(28)}}{A_{\text{c\oe ur + L1}}}\times 100.
+\]
+
+\[
+\%L1_{A15} = \frac{0.071448}{2}\times 100 = 3.572\%
+\]
+\[
+\%L1_{A7} = \frac{0.071175}{0.45}\times 100 = 15.817\%.
+\]
+
+\paragraph{Taille des c\oe urs hors caches L1.}
+\[
+A_{\text{c\oe ur hors L1}} = A_{\text{c\oe ur + L1}} - A_{L1,\text{tot}}^{(28)}.
+\]
+
+\[
+A_{\text{c\oe ur hors L1},A15} = 2 - 0.071448 = 1.928552\ \text{mm}^2,
+\]
+\[
+A_{\text{c\oe ur hors L1},A7} = 0.45 - 0.071175 = 0.378825\ \text{mm}^2.
+\]
+
+\paragraph{Analyse.}
+Les deux c\oe urs ont des surfaces de L1 très proches, y compris après normalisation à \(28\ \text{nm}\)
+(\(\approx 0.071\ \text{mm}^2\) pour \(I\)-L1+\(D\)-L1 dans les deux cas).
+L'impact relatif reste néanmoins très différent :
+les L1 représentent une part modérée du A15 (\(\approx 3.57\%\)),
+et une part nettement plus élevée du A7 (\(\approx 15.82\%\)).
+Le même budget de cache pèse donc davantage dans un c\oe ur plus compact.
