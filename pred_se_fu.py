@@ -18,7 +18,7 @@ from m5.objects import (
     SystemXBar, MemCtrl, DDR3_1600_8x8,
     Cache, L2XBar,
     FUPool, FUDesc, OpDesc,
-    BiModeBP, LocalBP, TournamentBP,
+    BranchPredictor, BiModeBP, LocalBP, TournamentBP,
 )
 
 import importlib
@@ -164,28 +164,37 @@ def main():
         system.cpu = DerivO3CPU()
         system.cpu.fuPool = build_fu_pool(args.ialu, args.imult, args.fpalu, args.fpmult, args.memport)
         system.cpu.numROBEntries = args.ruu
-        system.cpu.numIQEntries  = args.iq
-        system.cpu.LQEntries     = args.lq
-        system.cpu.SQEntries     = args.sq
+        if hasattr(system.cpu, "numIQEntries"):
+            system.cpu.numIQEntries = args.iq
+        else:
+            print("PRED_SE_FU: WARNING numIQEntries not supported by this gem5 build; ignoring --iq")
+        if hasattr(system.cpu, "LQEntries"):
+            system.cpu.LQEntries = args.lq
+        if hasattr(system.cpu, "SQEntries"):
+            system.cpu.SQEntries = args.sq
 
 
         # Branch predictor selection (TP)
+        def wrap_conditional(pred):
+            bp = BranchPredictor()
+            bp.conditionalBranchPred = pred
+            return bp
+
         if args.bpred == "bimod":
-            system.cpu.branchPred = BiModeBP()
+            system.cpu.branchPred = wrap_conditional(BiModeBP())
         elif args.bpred == "2lev":
-            system.cpu.branchPred = LocalBP()  # 2-level local predictor
+            system.cpu.branchPred = wrap_conditional(LocalBP())
         elif args.bpred == "tournament":
-            system.cpu.branchPred = TournamentBP()
+            system.cpu.branchPred = wrap_conditional(TournamentBP())
         elif args.bpred == "taken":
             cls = resolve_bp_class("StaticTakenBP")
             if cls is None:
-                raise RuntimeError("StaticTakenBP not found at runtime in m5.objects (export issue).")
+                raise RuntimeError("StaticTakenBP not available in this gem5 build.")
             system.cpu.branchPred = cls()
-
         elif args.bpred == "nottaken":
             cls = resolve_bp_class("StaticNotTakenBP")
             if cls is None:
-                raise RuntimeError("StaticNotTakenBP not found at runtime in m5.objects (export issue).")
+                raise RuntimeError("StaticNotTakenBP not available in this gem5 build.")
             system.cpu.branchPred = cls()
 
 
