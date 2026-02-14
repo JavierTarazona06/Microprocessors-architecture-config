@@ -89,3 +89,85 @@ L'impact relatif reste néanmoins très différent :
 les L1 représentent une part modérée du A15 (\(\approx 3.57\%\)),
 et une part nettement plus élevée du A7 (\(\approx 15.82\%\)).
 Le même budget de cache pèse donc davantage dans un c\oe ur plus compact.
+
+\subsection{Q8 : variation de la taille L1 et nouvelle surface totale (L2 inclus)}
+
+\paragraph{Méthode.}
+Nous faisons varier simultanément \(I\)-L1 et \(D\)-L1 dans les intervalles demandés :
+\[
+\text{A7}: \{1,2,4,8,16\}\ \text{KB},\qquad
+\text{A15}: \{2,4,8,16,32\}\ \text{KB}.
+\]
+Les surfaces de cache sont obtenues avec CACTI 6.5 (sorties à \(32\ \text{nm}\)), puis normalisées à \(28\ \text{nm}\) :
+\[
+A_{28}=A_{32}\left(\frac{28}{32}\right)^2.
+\]
+La surface totale demandée à Q8 est calculée par :
+\[
+A_{\text{total}}^{(28)} = A_{\text{c\oe ur hors L1}}^{(28)} + A_{L2}^{(28)} + A_{L1,I+D}^{(28)}.
+\]
+avec \(A_{\text{c\oe ur hors L1}}^{(28)}=1.928552\ \text{mm}^2\) (A15) et
+\(A_{\text{c\oe ur hors L1}}^{(28)}=0.378825\ \text{mm}^2\) (A7), issus de Q7.
+
+\paragraph{Résultats numériques (mm\(^2\))}
+
+Elles sont normalisés à 28 nm
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Q8 -- Cortex A7 : surface L1 totale et nouvelle surface totale (L2 inclus).}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{L1 (KB)} & \(\mathbf{A_{L1,I+D}^{(28)}}\) & \(\mathbf{A_{\text{total}}^{(28)}}\) \\
+\hline
+1  & 0.007995 & 0.757841 \\
+2  & 0.019817 & 0.769663 \\
+4  & 0.011540 & 0.761386 \\
+8  & 0.025437 & 0.775283 \\
+16 & 0.038482 & 0.788329 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Q8 -- Cortex A15 : surface L1 totale et nouvelle surface totale (L2 inclus).}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{L1 (KB)} & \(\mathbf{A_{L1,I+D}^{(28)}}\) & \(\mathbf{A_{\text{total}}^{(28)}}\) \\
+\hline
+2  & 0.019483 & 2.267949 \\
+4  & 0.009264 & 2.257730 \\
+8  & 0.025521 & 2.273987 \\
+16 & 0.028377 & 2.276843 \\
+32 & 0.071448 & 2.319914 \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Graphes demandés.}
+
+Deux graphes sont tracés :
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{../results/q8_surface/figures/q8_l1_total_area_vs_size_28nm.png}
+\caption{Q8 -- Surface totale de L1 (\(I\)-L1+\(D\)-L1) en fonction de la taille L1.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{../results/q8_surface/figures/q8_total_area_with_l2_vs_size_28nm.png}
+\caption{Q8 -- Nouvelle surface totale (coeur hors L1 + L1 + L2) en fonction de la taille L1.}
+\end{figure}
+
+\paragraph{Analyse.}
+L'augmentation de la taille L1 tend globalement à augmenter la surface totale, avec un décalage vertical dû à \(L2\) fixe
+(\(512\ \text{KB}\)). Les courbes ne sont pas strictement monotones pour toutes les tailles intermédiaires
+à cause des choix internes de floorplan/organisation CACTI (banques, mats, découpage), qui introduisent des paliers
+et des réorganisations discrètes.
+Malgré ces irrégularités locales, la tendance globale est claire :
+des L1 plus grands impliquent une surface totale plus grande pour A7 comme pour A15.

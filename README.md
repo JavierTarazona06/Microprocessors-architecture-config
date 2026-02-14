@@ -35,3 +35,48 @@ Catalogue des runs gem5. Chaque ligne = un run, traçable via `run_path`.
 - `exo3/normale.c`, `exo3/pointer.c`, `exo3/tempo.c`, `exo3/unrol.c` : implémentations des 4 variantes (ex : `pointer.c` utilise des pointeurs et vérifie le résultat).
 - `exo3/normale`, `exo3/pointer`, `exo3/tempo`, `exo3/unrol` : binaires natifs déjà générés (les versions RISC-V sont `*.riscv` après compilation).
 - `exo3/script.sh` : ébauche de script pour lancer des runs gem5 et extraire les miss rates depuis `stats.txt`.
+
+
+## Exercice 4
+
+Objectif : estimer les surfaces de caches avec CACTI et produire les résultats/graphes de Q8.
+
+### Prérequis
+- Avoir `g++`, `make` et `python3`.
+- Depuis la racine du repo : `Microprocessors-architecture-config`.
+
+### Compiler CACTI
+```bash
+cd Projet/cacti65
+make CXX=g++ CC=gcc
+```
+
+### Exécuter CACTI manuellement
+```bash
+cd Projet/cacti65
+./cacti -infile cache.cfg
+```
+
+Exemples utiles :
+```bash
+./cacti -infile cache_L1_A7.cfg
+./cacti -infile cache_L1_A15.cfg
+```
+
+### Exécuter le flux complet Q8
+Depuis la racine du repo :
+```bash
+python3 tp4/scripts/q8_surface_flow.py
+```
+
+Ce script :
+- lance les runs CACTI pour le sweep L1 (A7/A15) et L2 fixe (512KB),
+- extrait les surfaces,
+- normalise 32nm -> 28nm,
+- génère CSV + figures.
+
+Sorties principales :
+- `docs/results/q8_surface/q8_surface_summary.csv`
+- `docs/results/q8_surface/q8_surface_params.txt`
+- `docs/results/q8_surface/figures/q8_l1_total_area_vs_size_28nm.png`
+- `docs/results/q8_surface/figures/q8_total_area_with_l2_vs_size_28nm.png`

@@ -1,0 +1,10 @@
+Q8 surface flow parameters
+- CACTI node used for runs: 32nm
+- Normalization target node: 28nm
+- Area scaling factor: (28/32)^2 = 0.765625
+- L1 sweep A7 (KB): [1, 2, 4, 8, 16, 32]
+- L1 sweep A15 (KB): [2, 4, 8, 16, 32]
+- L2 fixed A7: 512KB / 32B / 8, area_32 = 0.484599 mm^2
+- L2 fixed A15: 512KB / 64B / 16, area_32 = 0.417846 mm^2
+- Core_no_L1_28 A7: 0.378825 mm^2
+- Core_no_L1_28 A15: 1.928552 mm^2
