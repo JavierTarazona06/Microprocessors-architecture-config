@@ -244,3 +244,39 @@ Pour A7, Dijkstra atteint son maximum à \(16\ \text{KB}\) (\(0.363814\) IPC/mm\
 atteint son maximum à \(8\ \text{KB}\) (\(0.378062\) IPC/mm\(^2\)) puis se tasse légèrement à \(16\ \text{KB}\).
 Globalement, les gains de performance liés à l'augmentation de L1 compensent le surcoût en surface sur la plage testée,
 avec un point de rendement décroissant plus tôt sur A7.
+
+\subsection{Q10 : puissance à la fréquence maximale}
+
+\paragraph{Formule utilisée.}
+La consigne donne une consommation énergétique en \(\text{mW}/\text{MHz}\).
+La puissance à fréquence maximale est calculée par :
+\[
+P\ (\text{mW})=\left(\frac{\text{mW}}{\text{MHz}}\right)\times f\ (\text{MHz}).
+\]
+
+\paragraph{Conversion des fréquences.}
+\[
+1.0\ \text{GHz}=1000\ \text{MHz}\quad(\text{A7}),\qquad
+2.5\ \text{GHz}=2500\ \text{MHz}\quad(\text{A15}).
+\]
+
+\paragraph{Calcul.}
+\[
+P_{A7}=0.10\times 1000=100\ \text{mW},
+\]
+\[
+P_{A15}=0.20\times 2500=500\ \text{mW}.
+\]
+
+\paragraph{Résultat Q10.}
+\[
+\text{Cortex-A7}=100\ \text{mW},\qquad
+\text{Cortex-A15}=500\ \text{mW}.
+\]
+
+\paragraph{Interprétation pratique.}
+Ces valeurs indiquent la puissance consommée à la fréquence maximale d'après les coefficients fournis par l'énoncé (28 nm).
+En pratique, ce n'est pas un jugement absolu ``bon'' ou ``mauvais'' :
+elles montrent surtout que, à pleine fréquence, l'A15 consomme environ \(5\times\) plus de puissance que l'A7.
+L'A7 est donc plus favorable pour des contraintes de basse puissance, tandis que l'A15 vise davantage la performance
+au prix d'une consommation plus élevée.
