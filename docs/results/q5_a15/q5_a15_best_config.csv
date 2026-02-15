@@ -1,0 +1,3 @@
+app,best_l1_by_ipc_kb,best_ipc,best_l1_by_cycles_kb,min_cycles,plateau_1pct_l1_kb,plateau_1pct_threshold_ipc
+dijkstra,32,1.056581,32,50150122.0,32,1.0460151899999999
+blowfish,32,1.576089,32,2156544.0,32,1.5603281100000002

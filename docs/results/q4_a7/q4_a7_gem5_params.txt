@@ -1,0 +1,13 @@
+Q4 A7 gem5 run parameters
+- CPU model: DerivO3CPU (out-of-order)
+- Config script: se_A7.py
+- L2 cache: 512kB, assoc=8, block=32B (fixed)
+- L1 sweep: I-L1 = D-L1 = 1kB, 2kB, 4kB, 8kB, 16kB
+- Branch predictor: BiModeBP/BranchPredictor wrapper with BTB=256
+- Decode/Issue/Commit: 2/4/2
+- RUU/LSQ (gem5 mapping): ROB=2, LQ=8, SQ=8
+- Fetch queue: 8
+- Memory: DDR3_1600_8x8, mem-size=2GB
+- Clock: 2GHz
+- Dataset: dijkstra input.dat, blowfish input_small.asc
+- Run directories: /home/javit/microprocesseurs/Microprocessors-architecture-config/tp4/runs/gem5/A7

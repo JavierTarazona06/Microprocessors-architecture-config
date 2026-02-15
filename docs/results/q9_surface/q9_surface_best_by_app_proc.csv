@@ -1,0 +1,5 @@
+proc,app,best_l1_kb,best_ipc,best_area_total_28,best_surf_eff_ipc_per_mm2
+A15,blowfish,32,1.576089,2.319913649,0.679373993
+A7,blowfish,8,0.293105,0.775283048,0.378061923
+A15,dijkstra,32,1.056581,2.319913649,0.455439796
+A7,dijkstra,16,0.286805,0.788328831,0.363813917

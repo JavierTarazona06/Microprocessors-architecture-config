@@ -48,6 +48,8 @@ def parse_args():
     ap.add_argument("--clock", default="2GHz")
     ap.add_argument("--mem-size", default="2GB")
     ap.add_argument("--maxinsts", type=int, default=0)
+    ap.add_argument("--l1i-size", default="32kB", help="taille cache L1I (ex: 2kB, 32kB)")
+    ap.add_argument("--l1d-size", default="32kB", help="taille cache L1D (ex: 2kB, 32kB)")
     return ap.parse_args()
 
 def build_system(args):
@@ -62,8 +64,8 @@ def build_system(args):
     # CPU (O3)
     system.cpu = DerivO3CPU()
 
-    # Fetch queue
-    system.cpu.fetchQueueSize = 15
+    # Fetch queue (Tableau 12)
+    system.cpu.fetchQueueSize = 8
     
     # Decode / Issue / Commit : 4 / 8 / 4
     system.cpu.decodeWidth  = 4
@@ -97,12 +99,12 @@ def build_system(args):
     # -------- Caches C-A15 --------
     # I-L1: 32KB / 64 / 2
     system.cpu.icache = L1ICache()
-    system.cpu.icache.size = "32kB"
+    system.cpu.icache.size = args.l1i_size
     system.cpu.icache.assoc = 2
 
     # D-L1: 32KB / 64 / 2
     system.cpu.dcache = L1DCache()
-    system.cpu.dcache.size = "32kB"
+    system.cpu.dcache.size = args.l1d_size
     system.cpu.dcache.assoc = 2
 
     # L2: 512KB / 64 / 16

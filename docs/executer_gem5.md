@@ -68,3 +68,23 @@ Points importants :
 - Pour BlowFish, passer les arguments via une seule chaine :
   `--options="e <repo>/Projet/blowfish/input_small.asc <outdir>/output.enc 0123456789ABCDEF"`.
 - `command.txt` doit etre present dans chaque dossier de run. Si gem5 ne le genere pas, le script Block 0 le cree avec la commande exacte executee.
+
+## Q5 (TP4 Ex4) — Cortex A15 L1 sweep
+
+Script recommande (compile + 10 runs + extraction + figures) :
+```bash
+cd /home/javit/microprocesseurs/Microprocessors-architecture-config
+bash tp4/scripts/q5_a15_l1_sweep.sh
+```
+
+Ce script effectue :
+- Compilation RISC-V statique de `dijkstra_small.riscv` et `bf.riscv`.
+- Sweep A15 avec `I-L1 = D-L1 = {2,4,8,16,32}kB` et `L2=512kB` fixe.
+- 10 runs gem5 dans `tp4/runs/gem5/A15/{dijkstra,blowfish}_L1_*k/`.
+- Extraction des metriques et generation des figures Q5.
+
+Sorties generees :
+- CSV detaille : `docs/results/q5_a15/q5_a15_l1_sweep.csv`
+- Resume meilleur L1 : `docs/results/q5_a15/q5_a15_best_config.csv`
+- Parametres gem5 utilises : `docs/results/q5_a15/q5_a15_gem5_params.txt`
+- Figures PNG : `docs/results/q5_a15/figures/`
