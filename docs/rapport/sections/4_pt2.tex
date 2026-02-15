@@ -98,6 +98,9 @@ Nous faisons varier simultanément \(I\)-L1 et \(D\)-L1 dans les intervalles dem
 \text{A7}: \{1,2,4,8,16\}\ \text{KB},\qquad
 \text{A15}: \{2,4,8,16,32\}\ \text{KB}.
 \]
+\textit{Note : un point A7 à \(32\ \text{KB}\) a été généré à titre hors consigne / additionnel
+pour comparaison visuelle avec A15. Les résultats exigés pour Q8 côté A7 restent
+strictement \(\{1,2,4,8,16\}\ \text{KB}\).}
 Les surfaces de cache sont obtenues avec CACTI 6.5 (sorties à \(32\ \text{nm}\)), puis normalisées à \(28\ \text{nm}\) :
 \[
 A_{28}=A_{32}\left(\frac{28}{32}\right)^2.
@@ -150,6 +153,7 @@ Elles sont normalisés à 28 nm
 \paragraph{Graphes demandés.}
 
 Deux graphes sont tracés :
+\textit{si le point A7 \(32\ \text{KB}\) apparaît dans les figures, il est hors consigne / additionnel.}
 
 
 \begin{figure}[H]
@@ -171,3 +175,72 @@ L'augmentation de la taille L1 tend globalement à augmenter la surface totale, 
 et des réorganisations discrètes.
 Malgré ces irrégularités locales, la tendance globale est claire :
 des L1 plus grands impliquent une surface totale plus grande pour A7 comme pour A15.
+
+\subsection{Q9 : efficacité surfacique (IPC/mm\(^2\))}
+
+\paragraph{Définition.}
+Pour chaque configuration de L1 et pour chaque application, nous calculons :
+\[
+\text{Efficacité surfacique}=\frac{IPC}{\text{surface totale (mm}^2\text{)}}.
+\]
+Les IPC proviennent des sweeps gem5 (Q4 pour A7 et Q5 pour A15) et les surfaces totales
+proviennent de Q8 (\(A_{\text{total}}^{(28)}\), base homogène 28 nm).
+
+\paragraph{Résultats -- Cortex A7.}
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Q9 -- A7 : IPC et efficacité surfacique (Dijkstra/Blowfish).}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{L1} & \(\mathbf{A_{\text{tot}}^{(28)}}\) & \(\mathbf{IPC_{Dij}}\) & \(\mathbf{SE_{Dij}}\) & \(\mathbf{IPC_{Bf}}\) & \(\mathbf{SE_{Bf}}\) \\
+\textbf{(KB)} & \textbf{(mm\(^2\))} &  & \textbf{(IPC/mm\(^2\))} &  & \textbf{(IPC/mm\(^2\))} \\
+\hline
+1  & 0.757841 & 0.239596 & 0.316156 & 0.244910 & 0.323168 \\
+2  & 0.769663 & 0.250319 & 0.325232 & 0.251317 & 0.326529 \\
+4  & 0.761386 & 0.260730 & 0.342441 & 0.264360 & 0.347209 \\
+8  & 0.775283 & 0.280289 & 0.361531 & 0.293105 & 0.378062 \\
+16 & 0.788329 & 0.286805 & 0.363814 & 0.294579 & 0.373675 \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Résultats -- Cortex A15.}
+\begin{table}[H]
+\centering
+\scriptsize
+\caption{Q9 -- A15 : IPC et efficacité surfacique (Dijkstra/Blowfish).}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{L1} & \(\mathbf{A_{\text{tot}}^{(28)}}\) & \(\mathbf{IPC_{Dij}}\) & \(\mathbf{SE_{Dij}}\) & \(\mathbf{IPC_{Bf}}\) & \(\mathbf{SE_{Bf}}\) \\
+\textbf{(KB)} & \textbf{(mm\(^2\))} &  & \textbf{(IPC/mm\(^2\))} &  & \textbf{(IPC/mm\(^2\))} \\
+\hline
+2  & 2.267949 & 0.654431 & 0.288556 & 1.045684 & 0.461070 \\
+4  & 2.257730 & 0.714325 & 0.316391 & 1.129990 & 0.500498 \\
+8  & 2.273987 & 0.878416 & 0.386289 & 1.415052 & 0.622278 \\
+16 & 2.276843 & 0.947300 & 0.416059 & 1.446239 & 0.635195 \\
+32 & 2.319914 & 1.056581 & 0.455440 & 1.576089 & 0.679374 \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{Graphes Q9.}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{../results/q9_surface/figures/q9_dijkstra_se_vs_l1.png}
+\caption{Q9 -- Efficacité surfacique de Dijkstra en fonction de la taille L1.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{../results/q9_surface/figures/q9_blowfish_se_vs_l1.png}
+\caption{Q9 -- Efficacité surfacique de Blowfish en fonction de la taille L1.}
+\end{figure}
+
+\paragraph{Analyse.}
+Pour A15, l'efficacité surfacique augmente avec L1 pour les deux applications, et le meilleur point observé
+est \(32\ \text{KB}\) (Dijkstra : \(0.455440\), Blowfish : \(0.679374\) IPC/mm\(^2\)).
+Pour A7, Dijkstra atteint son maximum à \(16\ \text{KB}\) (\(0.363814\) IPC/mm\(^2\)), tandis que Blowfish
+atteint son maximum à \(8\ \text{KB}\) (\(0.378062\) IPC/mm\(^2\)) puis se tasse légèrement à \(16\ \text{KB}\).
+Globalement, les gains de performance liés à l'augmentation de L1 compensent le surcoût en surface sur la plage testée,
+avec un point de rendement décroissant plus tôt sur A7.

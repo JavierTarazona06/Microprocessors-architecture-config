@@ -39,7 +39,7 @@ Catalogue des runs gem5. Chaque ligne = un run, traçable via `run_path`.
 
 ## Exercice 4
 
-Objectif : estimer les surfaces de caches avec CACTI et produire les résultats/graphes de Q8.
+Objectif : exécuter les sweeps gem5/CACTI et produire les résultats/graphes de Q4, Q8 et Q9.
 
 ### Prérequis
 - Avoir `g++`, `make` et `python3`.
@@ -80,3 +80,40 @@ Sorties principales :
 - `docs/results/q8_surface/q8_surface_params.txt`
 - `docs/results/q8_surface/figures/q8_l1_total_area_vs_size_28nm.png`
 - `docs/results/q8_surface/figures/q8_total_area_with_l2_vs_size_28nm.png`
+
+### Exécuter le sweep Q4 (A7)
+Depuis la racine du repo :
+```bash
+tp4/scripts/q4_a7_l1_sweep.sh
+```
+
+Ce script :
+- lance gem5 A7 pour `L1 = 1,2,4,8,16 kB` (I-L1 = D-L1),
+- exécute `dijkstra` et `blowfish`,
+- extrait automatiquement les métriques (IPC, cycles, miss rates, branchement).
+
+Sorties principales :
+- `docs/results/q4_a7/q4_a7_l1_sweep.csv`
+- `docs/results/q4_a7/q4_a7_best_config.csv`
+- `docs/results/q4_a7/q4_a7_gem5_params.txt`
+- `docs/results/q4_a7/figures/`
+
+### Calculer Q9 (efficacité surfacique IPC/mm²)
+Depuis la racine du repo :
+```bash
+python3 tp4/scripts/q9_surface_efficiency.py \
+  --a7-ipc-csv docs/results/q4_a7/q4_a7_l1_sweep.csv \
+  --a15-ipc-csv docs/results/q5_a15/q5_a15_l1_sweep.csv \
+  --area-csv docs/results/q8_surface/q8_surface_summary.csv \
+  --out-csv docs/results/q9_surface/q9_surface_efficiency.csv \
+  --best-csv docs/results/q9_surface/q9_surface_best_by_app_proc.csv \
+  --figures-dir docs/results/q9_surface/figures \
+  --params-txt docs/results/q9_surface/q9_surface_params.txt
+```
+
+Sorties principales :
+- `docs/results/q9_surface/q9_surface_efficiency.csv`
+- `docs/results/q9_surface/q9_surface_best_by_app_proc.csv`
+- `docs/results/q9_surface/q9_surface_params.txt`
+- `docs/results/q9_surface/figures/q9_dijkstra_se_vs_l1.png`
+- `docs/results/q9_surface/figures/q9_blowfish_se_vs_l1.png`

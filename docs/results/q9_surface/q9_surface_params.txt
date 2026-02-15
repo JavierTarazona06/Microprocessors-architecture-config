@@ -1,0 +1,10 @@
+Q9 surface efficiency parameters
+- Formula: surf_eff = IPC / area_total_28
+- IPC A7 source: /home/javit/microprocesseurs/Microprocessors-architecture-config/docs/results/q4_a7/q4_a7_l1_sweep.csv
+- IPC A15 source: /home/javit/microprocesseurs/Microprocessors-architecture-config/docs/results/q5_a15/q5_a15_l1_sweep.csv
+- Area source: /home/javit/microprocesseurs/Microprocessors-architecture-config/docs/results/q8_surface/q8_surface_summary.csv (column A_total_new_28, mm^2 @ 28nm)
+- Domains:
+  - A7 L1: 1,2,4,8,16 KB
+  - A15 L1: 2,4,8,16,32 KB
+- Validation sample:
+  - A15 dijkstra L1=8KB -> surf_eff = 0.386288968 IPC/mm^2
